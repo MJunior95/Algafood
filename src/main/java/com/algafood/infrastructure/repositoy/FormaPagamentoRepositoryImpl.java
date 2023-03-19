@@ -19,7 +19,7 @@ public class FormaPagamentoRepositoryImpl implements FormaPagamentoRepository{
 	
 	@Override
 	public List<FormaPagamento> listar(){
-		return manager.createQuery("from forma_pagamento",FormaPagamento.class).getResultList();
+		return manager.createQuery("from FormaPagamento",FormaPagamento.class).getResultList();
 		
 	}
 	@Override
