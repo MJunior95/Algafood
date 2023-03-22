@@ -2,7 +2,6 @@ package com.algafood.domain.repository;
 
 import java.util.List;
 
-import com.algafood.domain.model.Cozinha;
 import com.algafood.domain.model.FormaPagamento;
 
 public interface FormaPagamentoRepository {
