@@ -1,6 +1,7 @@
 package com.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,17 @@ public class CidadeController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Cidade> listar() {
-		return repository.listar();
+		return repository.findAll();
 	}
 
 	@GetMapping("/{cidadeId}")
 	public ResponseEntity<Cidade> buscar(@PathVariable("cidadeId") Long id) {
-		Cidade cidade = repository.buscar(id);
+		Optional<Cidade> cidade = repository.findById(id);
 
-		if (cidade == null) {
+		if (cidade.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(cidade);
+		return ResponseEntity.ok(cidade.get());
 	}
 
 	@PostMapping
@@ -56,17 +57,17 @@ public class CidadeController {
 
 	@PutMapping("/{cidadeId}")
 	public ResponseEntity<Cidade> atualizar(@PathVariable("cidadeId") Long id, @RequestBody Cidade cidade) {
-		Cidade cidadeAtual = repository.buscar(id);
+		Optional<Cidade> cidadeAtual = repository.findById(id);
 
-		if (cidadeAtual == null) {
+		if (cidadeAtual.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+		BeanUtils.copyProperties(cidade, cidadeAtual.get(), "id");
 
-		service.salvar(cidadeAtual);
+		Cidade cidadeRetornada = service.salvar(cidadeAtual.get());
 
-		return ResponseEntity.ok(cidadeAtual);
+		return ResponseEntity.ok(cidadeRetornada);
 
 	}
 

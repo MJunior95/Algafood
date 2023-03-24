@@ -12,17 +12,18 @@ import com.algafood.domain.repository.CozinhaRepository;
 
 @Service
 public class CadastroCozinhaService {
-	
+
 	@Autowired
 	private CozinhaRepository repository;
-	
+
 	public Cozinha salvar(Cozinha cozinha) {
-		return repository.salvar(cozinha);
+		return repository.save(cozinha);
 	}
-	
+
 	public void excluir(Long cozinhaId) {
 		try {
-			repository.remover(cozinhaId);
+			repository.deleteById(cozinhaId);
+
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 					String.format("Cozinha de código %d não pode ser removida, pois está em uso", cozinhaId));

@@ -17,12 +17,12 @@ public class CadastroCidadeService {
 	private CidadeRepository repository;
 	
 	public Cidade salvar(Cidade cidade) {
-		return repository.salvar(cidade);
+		return repository.save(cidade);
 	}
 	
 	public void excluir(Long cidadeId) {
 		try {
-			repository.remover(cidadeId);
+			repository.deleteById(cidadeId);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
 					String.format("Cidade de código %d não pode ser removida, pois está em uso", cidadeId));
