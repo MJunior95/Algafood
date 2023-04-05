@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.algafood.domain.exception.EntidadeEmUsoException;
 import com.algafood.domain.exception.EntidadeNaoEncotradaException;
@@ -90,6 +91,11 @@ public class CozinhaController {
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable("cozinhaId") Long id) {
+		try {
 			service.excluir(id);
+			
+		} catch (EntidadeNaoEncotradaException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
 	}
 }
