@@ -73,17 +73,23 @@ public class CozinhaController {
 
 	}
 
+//	@DeleteMapping("/{cozinhaId}")
+//	public ResponseEntity<Cozinha> remover(@PathVariable("cozinhaId") Long id) {
+	//	try {
+	//		service.excluir(id);
+
+	//		return ResponseEntity.noContent().build();
+
+	//	} catch (EntidadeEmUsoException e) {
+	//		return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		//} catch (EntidadeNaoEncotradaException e) {
+		//	return ResponseEntity.notFound().build();
+	//	}
+	//}
+	
 	@DeleteMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> remover(@PathVariable("cozinhaId") Long id) {
-		try {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable("cozinhaId") Long id) {
 			service.excluir(id);
-
-			return ResponseEntity.noContent().build();
-
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		} catch (EntidadeNaoEncotradaException e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 }
