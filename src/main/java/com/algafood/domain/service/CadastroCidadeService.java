@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.algafood.domain.exception.EntidadeEmUsoException;
 import com.algafood.domain.exception.EntidadeNaoEncotradaException;
 import com.algafood.domain.model.Cidade;
+import com.algafood.domain.model.Estado;
 import com.algafood.domain.repository.CidadeRepository;
 
 @Service
@@ -19,7 +20,17 @@ public class CadastroCidadeService {
 	@Autowired
 	private CidadeRepository repository;
 	
+	@Autowired
+	private CadastroEstadoService serviceEstado;
+	
 	public Cidade salvar(Cidade cidade) {
+		
+		Long estadoId = cidade.getEstado().getId();
+		
+		Estado estado = serviceEstado.buscarOuFalhar(estadoId);
+		
+		cidade.setEstado(estado);
+		
 		return repository.save(cidade);
 	}
 	
