@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algafood.domain.exception.EstadoNaoEncontradoException;
+import com.algafood.domain.exception.NegocioException;
 import com.algafood.domain.model.Cidade;
 import com.algafood.domain.repository.CidadeRepository;
 import com.algafood.domain.service.CadastroCidadeService;
@@ -23,7 +25,7 @@ import com.algafood.domain.service.CadastroCidadeService;
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
-	
+
 	@Autowired
 	private CidadeRepository repository;
 
@@ -37,23 +39,32 @@ public class CidadeController {
 
 	@GetMapping("/{cidadeId}")
 	public Cidade buscar(@PathVariable("cidadeId") Long id) {
-		
+
 		return service.buscarOuFalhar(id);
-		
+
 	}
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cidade adicionar(@RequestBody Cidade cidade) {
-		return service.salvar(cidade);
+		try {
+			return service.salvar(cidade);
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 	}
 
 	@PutMapping("/{cidadeId}")
 	public Cidade atualizar(@PathVariable("cidadeId") Long id, @RequestBody Cidade cidade) {
-		Cidade cidadeAtual = service.buscarOuFalhar(id);
 
-		BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-
-		return service.salvar(cidadeAtual);
+		try {
+			Cidade cidadeAtual = service.buscarOuFalhar(id);
+			
+			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+			return service.salvar(cidadeAtual);
+		} catch (EstadoNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 
 	}
 
