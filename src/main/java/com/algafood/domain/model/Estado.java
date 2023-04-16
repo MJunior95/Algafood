@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.algafood.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,13 +18,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Estado {
 	
-	@Id
+	@NotNull(groups = Groups.EstadoId.class)
 	@EqualsAndHashCode.Include
-	@Column(name="id")
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name="nome")
+
+	@NotBlank
+	@Column(nullable = false)
 	private String nome;
-	
 }

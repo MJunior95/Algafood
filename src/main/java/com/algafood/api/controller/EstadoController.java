@@ -2,6 +2,8 @@ package com.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,12 +44,12 @@ public class EstadoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estado adicionar(@RequestBody Estado estado) {
+	public Estado adicionar(@RequestBody @Valid Estado estado) {
 		return service.salvar(estado);
 	}
 
 	@PutMapping("/{estadoId}")
-	public Estado atualizar(@PathVariable("estadoId") Long id, @RequestBody Estado estado) {
+	public Estado atualizar(@PathVariable("estadoId") Long id, @RequestBody  @Valid Estado estado) {
 		Estado estadoAtual = service.buscarOuFalhar(id);
 
 		BeanUtils.copyProperties(estado, estadoAtual, "id");
