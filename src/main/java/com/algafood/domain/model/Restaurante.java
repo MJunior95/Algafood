@@ -28,6 +28,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algafood.core.validation.Groups;
+import com.algafood.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -49,7 +50,8 @@ public class Restaurante {
 	@Column(name="nome")
 	private String nome;
 	
-	@PositiveOrZero
+	//@PositiveOrZero
+	@TaxaFrete
 	@NotNull 
 	@Column(name = "taxa_frete")
 	private BigDecimal taxaFrete;
