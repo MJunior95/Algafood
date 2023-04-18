@@ -39,23 +39,23 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Restaurante {
-	
+
 	@Id
 	@EqualsAndHashCode.Include
-	@Column(name="id")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank(message = "Nome é obrigatório")
-	@Column(name="nome")
+	@Column(name = "nome")
 	private String nome;
-	
-	//@PositiveOrZero
+
+	// @PositiveOrZero
 	@TaxaFrete
-	@NotNull 
+	@NotNull
 	@Column(name = "taxa_frete")
 	private BigDecimal taxaFrete;
-	
+
 	@ManyToOne
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@NotNull
@@ -63,12 +63,12 @@ public class Restaurante {
 	@JsonIgnoreProperties("hibernateLazyInitializer")
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
-	
+
 	@Embedded
 	@JsonIgnore
 	private Endereco endereco;
-	
-	@CreationTimestamp 
+
+	@CreationTimestamp
 	@JsonIgnore
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
@@ -77,14 +77,12 @@ public class Restaurante {
 	@JsonIgnore
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataAtualizacao;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JsonIgnore
-	@JoinTable(name = "restaurante_forma_pagamento",
-			joinColumns = @JoinColumn(name = "restaurante_id"),
-			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
+	@JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "restaurante")
 	@JsonIgnore
 	private List<Produto> produtos = new ArrayList<>();
