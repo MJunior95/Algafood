@@ -6,6 +6,7 @@ import javax.validation.ConstraintViolationException;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,9 @@ import com.algafood.domain.service.CadastroCozinhaService;
 @RunWith(SpringRunner.class)
 public class CadastroCozinhaIntegrationTests {
 
+	@Autowired
+	private Flyway flyway;
+
 	@LocalServerPort
 	private int port;
 	
@@ -36,6 +40,7 @@ public class CadastroCozinhaIntegrationTests {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		RestAssured.basePath = "/cozinhas";
+		flyway.migrate();
 	}
 
 	@Test
