@@ -4,8 +4,6 @@ import com.algafood.algafoodapi.util.DatabaseCleaner;
 import com.algafood.algafoodapi.util.ResourceUtils;
 import com.algafood.domain.model.Cozinha;
 import com.algafood.domain.repository.CozinhaRepository;
-import org.flywaydb.core.Flyway;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
