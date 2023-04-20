@@ -6,6 +6,7 @@ import javax.validation.ConstraintViolationException;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,19 @@ public class CadastroCozinhaIntegrationTests {
 					.get()
 				.then()
 					.statusCode(HttpStatus.OK.value());
+	}
+	@Test
+	public void deveConterQuatroCozinhasQuandoConsultarCozinhas(){
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+		RestAssured.given()
+					.basePath("/cozinhas")
+					.port(8080)
+					.accept(ContentType.JSON)
+				.when()
+					.get()
+				.then()
+					.body("", Matchers.hasSize(4))
+					.body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
 	}
 }
