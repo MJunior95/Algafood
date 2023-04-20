@@ -45,14 +45,12 @@ public class CadastroCozinhaIntegrationTests {
 	@Test(expected = EntidadeEmUsoException.class)
 	public void deveFalharAoExcluirCozinhaEmUso() {
 		Long idCozinhaEmUso = 1l;
-		
 		cadastroCozinha.excluir(idCozinhaEmUso);
 	}
 	
 	@Test(expected = EntidadeNaoEncontradaException.class)
 	public void deveFalharAoExcluirCozinhaInexistente() {
 		Long idCozinhaInexistente = 1000l;
-		
 		cadastroCozinha.excluir(idCozinhaInexistente);
 	}
 
