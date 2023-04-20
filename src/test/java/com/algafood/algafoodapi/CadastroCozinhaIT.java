@@ -1,11 +1,8 @@
 package com.algafood.algafoodapi;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import javax.validation.ConstraintViolationException;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import com.algafood.algafoodapi.util.DatabaseCleaner;
+import com.algafood.domain.model.Cozinha;
+import com.algafood.domain.repository.CozinhaRepository;
 import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -15,32 +12,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.algafood.domain.exception.EntidadeEmUsoException;
-import com.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algafood.domain.model.Cozinha;
 import com.algafood.domain.service.CadastroCozinhaService;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
-public class CadastroCozinhaIntegrationTests {
-
-	@Autowired
-	private Flyway flyway;
+@TestPropertySource("/application-test.properties")
+public class CadastroCozinhaIT {
 
 	@LocalServerPort
 	private int port;
+
+	@Autowired
+	private DatabaseCleaner databaseCleaner;
 	
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
+
+	@Autowired
+	private CozinhaRepository cozinhaRepository;
 
 	@Before
 	public void setUp(){
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		RestAssured.basePath = "/cozinhas";
-		flyway.migrate();
+
+		databaseCleaner.clearTables();
+		this.prepararDados();
 	}
 
 	@Test
@@ -53,13 +57,13 @@ public class CadastroCozinhaIntegrationTests {
 					.statusCode(HttpStatus.OK.value());
 	}
 	@Test
-	public void deveConterQuatroCozinhasQuandoConsultarCozinhas(){
+	public void deveConterDuasCozinhasQuandoConsultarCozinhas(){
 		RestAssured.given()
 				.accept(ContentType.JSON)
 				.when()
 				.get()//Se refere ao metodo GET do HTTP
 				.then()
-				.body("", Matchers.hasSize(4))
+				.body("", Matchers.hasSize(2))
 				.body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
 	}
 
@@ -72,5 +76,16 @@ public class CadastroCozinhaIntegrationTests {
 				.when().post()
 				.then()
 				.statusCode(HttpStatus.CREATED.value());
+	}
+
+	private void prepararDados(){
+		Cozinha cozinha1 =  new Cozinha();
+		cozinha1.setNome("Indiana");
+
+		cozinhaRepository.save(cozinha1);
+
+		Cozinha cozinha2 =  new Cozinha();
+		cozinha2.setNome("Tailandesa");
+		cozinhaRepository.save(cozinha2);
 	}
 }
