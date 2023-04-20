@@ -7,6 +7,7 @@ import javax.validation.ConstraintViolationException;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,36 +26,46 @@ import com.algafood.domain.service.CadastroCozinhaService;
 public class CadastroCozinhaIntegrationTests {
 
 	@LocalServerPort
-	private int Port;
+	private int port;
 	
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
 
+	@Before
+	public void setUp(){
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		RestAssured.port = port;
+		RestAssured.basePath = "/cozinhas";
+	}
+
 	@Test
 	public void deveRetornarStatus200QuandoConsultarCozinhas(){
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
 		RestAssured.given()
-					.basePath("/cozinhas")
-					.port(8080)
 					.accept(ContentType.JSON)
 				.when()
-					.get()
+					.get()//Se refere ao metodo GET do HTTP
 				.then()
 					.statusCode(HttpStatus.OK.value());
 	}
 	@Test
 	public void deveConterQuatroCozinhasQuandoConsultarCozinhas(){
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
 		RestAssured.given()
-					.basePath("/cozinhas")
-					.port(8080)
-					.accept(ContentType.JSON)
+				.accept(ContentType.JSON)
 				.when()
-					.get()
+				.get()//Se refere ao metodo GET do HTTP
 				.then()
-					.body("", Matchers.hasSize(4))
-					.body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+				.body("", Matchers.hasSize(4))
+				.body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+	}
+
+	@Test
+	public void deveRetornarStatus201QQuandoCadastrarCozinha(){
+		RestAssured.given()
+				.body("{\"nome\": \"Chinesa\" }")
+				.contentType(ContentType.JSON)
+				.accept(ContentType.JSON)
+				.when().post()
+				.then()
+				.statusCode(HttpStatus.CREATED.value());
 	}
 }
