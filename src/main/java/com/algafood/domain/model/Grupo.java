@@ -32,7 +32,6 @@ public class Grupo {
 	private String nome;
 	
 	@ManyToMany
-	@JsonIgnore
 	@JoinTable(name = "grupo_permissao",
 			joinColumns = @JoinColumn(name = "grupo_id"),
 			inverseJoinColumns = @JoinColumn(name = "permissao_id"))
