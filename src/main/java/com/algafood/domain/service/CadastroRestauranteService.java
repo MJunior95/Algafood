@@ -10,6 +10,7 @@ import com.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algafood.domain.model.Cozinha;
 import com.algafood.domain.model.Restaurante;
 import com.algafood.domain.repository.RestauranteRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroRestauranteService {
@@ -24,7 +25,7 @@ public class CadastroRestauranteService {
 	private CadastroCozinhaService serviceCozinha;
 	
 	
-	
+	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
 		
@@ -34,7 +35,8 @@ public class CadastroRestauranteService {
 		
 		return restauranteRepository.save(restaurante);
 	}
-	
+
+	@Transactional
 	public void excluir(Long restauranteId) {
 		try {
 			restauranteRepository.deleteById(restauranteId);

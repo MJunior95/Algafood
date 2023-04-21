@@ -9,6 +9,7 @@ import com.algafood.domain.exception.EntidadeEmUsoException;
 import com.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algafood.domain.model.Estado;
 import com.algafood.domain.repository.EstadoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroEstadoService {
@@ -17,11 +18,13 @@ public class CadastroEstadoService {
 	
 	@Autowired
 	private EstadoRepository repository;
-	
+
+	@Transactional
 	public Estado salvar(Estado estado) {
 		return repository.save(estado);
 	}
-	
+
+	@Transactional
 	public void excluir(Long estadoId) {
 		try {
 			repository.deleteById(estadoId);

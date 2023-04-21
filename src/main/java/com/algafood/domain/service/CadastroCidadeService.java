@@ -11,6 +11,7 @@ import com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algafood.domain.model.Cidade;
 import com.algafood.domain.model.Estado;
 import com.algafood.domain.repository.CidadeRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroCidadeService {
@@ -19,21 +20,24 @@ public class CadastroCidadeService {
 	
 	@Autowired
 	private CidadeRepository repository;
-	
+
 	@Autowired
+
 	private CadastroEstadoService serviceEstado;
-	
+
+	@Transactional
 	public Cidade salvar(Cidade cidade) {
-		
+
 		Long estadoId = cidade.getEstado().getId();
-		
+
 		Estado estado = serviceEstado.buscarOuFalhar(estadoId);
-		
+
 		cidade.setEstado(estado);
-		
+
 		return repository.save(cidade);
 	}
-	
+
+	@Transactional
 	public void excluir(Long cidadeId) {
 		try {
 			repository.deleteById(cidadeId);
