@@ -49,7 +49,6 @@ public class Restaurante {
 	@Column(name = "nome")
 	private String nome;
 
-	// @PositiveOrZero
 	@TaxaFrete
 	@NotNull
 	@Column(name = "taxa_frete")
@@ -59,7 +58,7 @@ public class Restaurante {
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@NotNull
 	@Valid
-	@JsonIgnoreProperties("hibernateLazyInitializer")
+	@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "nome"}, allowGetters = true)
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
 
